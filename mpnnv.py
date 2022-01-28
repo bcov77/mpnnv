@@ -4,7 +4,7 @@ import sys
 import os
 import argparse
 
-sys.path = ["/home/bcov/.conda/envs/mypy_36/lib/python3.6/", "./"]
+# sys.path = ["/home/bcov/.conda/envs/mypy_36/lib/python3.6/", "./"]
 
 os.environ['XLA_PYTHON_CLIENT_PREALLOCATE']='false'
 
