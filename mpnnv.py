@@ -19,6 +19,7 @@ parser.add_argument( "-num_connections", type=int, default=30, help='Number of n
 parser.add_argument( "-sys_path_insert", type=str, default="", help='comma separated sys.path.insert(0, "")' )
 parser.add_argument( "-pipes", type=int, nargs="*", help='read_pipe write_pipe close_pipe close_pipe' )
 parser.add_argument( "-test_pdb", type=str, default="")
+parser.add_argument( "-mute", action="store_true")
 
 args = parser.parse_args( sys.argv[1:] )
 
@@ -84,7 +85,8 @@ def init_seq_optimize_model():
 
     model = mpnn_util.Struct2Seq(num_letters=21, node_features=hidden_feat_dim, edge_features=hidden_feat_dim, hidden_dim=hidden_feat_dim, num_encoder_layers=num_layers,num_decoder_layers=num_layers, use_mpnn=True, protein_features=args.protein_features, augment_eps=args.augment_eps, k_neighbors=args.num_connections)
     model.to(mpnn_util.device)
-    print('Number of model parameters: {}'.format(sum([p.numel() for p in model.parameters()])))
+    if ( not args.mute ):
+        print('Number of model parameters: {}'.format(sum([p.numel() for p in model.parameters()])))
     checkpoint = torch.load(args.checkpoint_path, map_location=torch.device(mpnn_util.device))
     model.load_state_dict(checkpoint['model_state_dict'])
     model.eval()
@@ -202,7 +204,8 @@ def sequence_optimize( pdb_data, chains, model ):
 
     sequences = mpnn_util.generate_sequences( model, feature_dict, arg_dict, masked_chains, visible_chains )
     
-    print( f"MPNN generated {len(sequences)} sequences in {int( time.time() - t0 )} seconds" ) 
+    if ( not args.mute ):
+        print( f"MPNN generated {len(sequences)} sequences in {int( time.time() - t0 )} seconds" ) 
 
     return sequences
 
@@ -214,7 +217,8 @@ def process_piped_message(data):
         return None
     pdb_data = data[first_newline+1:]
     first_line = data[:first_newline].decode("ascii")
-    print("MPNNV: ", first_line)
+    if ( not args.mute ):
+        print("MPNNV: ", first_line)
 
     sp = first_line.split()
     unique_timestamp = sp[0]
@@ -240,7 +244,7 @@ def write_message(f_write, message, add_null=True, max_failures=20):
     if ( add_null ):
         message = message + bytes([0])
 
-    print("MPNNV writing: ", message)
+    # print("MPNNV writing: ", message)
     fail_count = 0
     while ( written < len(message) ):
 
