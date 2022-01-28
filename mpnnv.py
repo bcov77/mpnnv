@@ -22,7 +22,7 @@ parser.add_argument( "-test_pdb", type=str, default="")
 
 args = parser.parse_args( sys.argv[1:] )
 
-if ( args.sys_path_insert > 0 ):
+if ( len(args.sys_path_insert) > 0 ):
     sp = args.sys_path_insert.split(",")
     for elem in sp:
         sys.path.insert(0, elem)
