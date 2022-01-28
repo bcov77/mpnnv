@@ -27,6 +27,14 @@ if ( len(args.sys_path_insert) > 0 ):
     for elem in sp:
         sys.path.insert(0, elem)
 
+    new_sys = []
+    for elem in sys.path:
+        if ( "home" in elem or "work" in elem or "scratch" in elem):
+            pass
+        else:
+            new_sys.append(elem)
+    sys.path = new_sys
+
 
 import generate_sequences_s2s_chain as mpnn_util
 import torch
