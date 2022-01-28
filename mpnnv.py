@@ -8,12 +8,6 @@ import argparse
 
 os.environ['XLA_PYTHON_CLIENT_PREALLOCATE']='false'
 
-import generate_sequences_s2s_chain as mpnn_util
-import torch
-import time
-import numpy as np
-import socket
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument( "-checkpoint_path", type=str, default='/projects/ml/struc2seq/data_for_complexes/training_scripts/models/new_frame_v4/checkpoints/epoch35_step175000.pt' )
@@ -22,10 +16,23 @@ parser.add_argument( "-augment_eps", type=float, default=0.05, help='The varianc
 parser.add_argument( "-do_predictor", action="store_true", help='Whether or not to run the predictor step and generate an estimated ddg for each MPNN sequence (default False)' )
 parser.add_argument( "-protein_features", type=str, default='full', help='An a3m file containing the MSA of your target' )
 parser.add_argument( "-num_connections", type=int, default=30, help='Number of neighbors each residue is connected to, default 64, higher number leads to better interface design but will cost more to run the model.' )
+parser.add_argument( "-sys_path_insert", type=str, default="", help='comma separated sys.path.insert(0, "")' )
 parser.add_argument( "-pipes", type=int, nargs="*", help='read_pipe write_pipe close_pipe close_pipe' )
 parser.add_argument( "-test_pdb", type=str, default="")
 
 args = parser.parse_args( sys.argv[1:] )
+
+if ( args.sys_path_insert > 0 ):
+    sp = args.sys_path_insert.split(",")
+    for elem in sp:
+        sys.path.insert(0, elem)
+
+
+import generate_sequences_s2s_chain as mpnn_util
+import torch
+import time
+import numpy as np
+import socket
 
 
 
