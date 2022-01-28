@@ -331,6 +331,8 @@ while True:
         if ( len(data) == 0 ):
             print("EOF detected")
             break
+    else:
+        time.sleep(0.1)
 
     while ( null_detected ):
         null_offset = data_buf.find(0)
