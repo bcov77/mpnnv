@@ -1,8 +1,17 @@
 #!/usr/bin/env python
 
+import sys
+
+new_sys = []
+for elem in sys.path:
+    if ( "home" in elem or "work" in elem or "scratch" in elem):
+        pass
+    else:
+        new_sys.append(elem)
+sys.path = new_sys
+
 
 import os
-import sys
 import subprocess
 import time
 import glob
