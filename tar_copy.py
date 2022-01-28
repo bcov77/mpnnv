@@ -91,7 +91,7 @@ while( time.time() - start_time < 3600 ):
 
         if ( is_us[0] ):
             print("We're doing it!")
-            out, err, code = cmd2("cd %s; sleep 30; tar -xzf %s"%(dest, tar_file))
+            out, err, code = cmd2("cd %s; tar -xzf %s"%(dest, tar_file))
             print(out)
             print(err)
 
